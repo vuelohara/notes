@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; manifest-src 'self'; worker-src 'self'; connect-src 'none'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Diary">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f5f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1b1d" media="(prefers-color-scheme: dark)">
+<title>Local Diary</title>
+<style>
+:root{
+  --bg:#f5f3ee; --panel:#fffdf9; --ink:#2b2a27; --muted:#7c776d; --line:#e3ded3; --hover:#eeeae1;
+  --accent:#3d5a80; --accent-ink:#fff; --mark:#ffe8a3; --danger:#b4473b;
+  --m1:#8b6fb3; --m2:#6c8fb5; --m3:#a19c92; --m4:#cf9f45; --m5:#e0774a;
+  --radius:10px; --shadow:0 1px 2px rgba(0,0,0,.05),0 6px 24px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#1a1b1d; --panel:#232427; --ink:#e7e5e0; --muted:#9b978e; --line:#36373b; --hover:#2d2e32;
+    --accent:#8fb3e0; --accent-ink:#10141a; --mark:#6b5a1e; --danger:#e07b6f; --shadow:none; }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;-webkit-text-size-adjust:100%}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:.45em .9em}
+button:hover{background:var(--hover)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:600}
+button.primary:hover{filter:brightness(1.08)}
+button.ghost{border-color:transparent;background:transparent}
+button.danger{color:var(--danger)}
+button:disabled{opacity:.5;cursor:default}
+input[type=text],input[type=password],input[type=search],input[type=date],input[type=time],input:not([type]),textarea{
+  width:100%;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:.55em .75em;outline:none}
+input:focus,textarea:focus{border-color:var(--accent)}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+[hidden]{display:none!important}
+
+/* lock */
+#lock{min-height:100%;display:grid;place-items:center;padding:24px 16px}
+.card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px 24px;box-shadow:var(--shadow)}
+.card h1{margin:0 0 4px;font-size:22px;letter-spacing:.02em}
+.card .sub{margin:0 0 20px;color:var(--muted);font-size:13px}
+.card form,.card .stack{display:grid;gap:10px}
+.card .choice{text-align:left;padding:12px 14px}
+.card .choice b{display:block}
+.card .choice span{font-size:12.5px;color:var(--muted)}
+.msg{min-height:1.4em;font-size:13px;color:var(--danger);margin-top:8px}
+.note{font-size:12.5px;color:var(--muted);background:var(--hover);border-radius:8px;padding:10px 12px}
+.linkish{background:none;border:none;padding:0;color:var(--accent);font-size:13px;text-decoration:underline;justify-self:start}
+
+/* app */
+#app{height:100%;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:8px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));border-bottom:1px solid var(--line);background:var(--panel);position:relative}
+.brand{font-weight:700;letter-spacing:.04em}
+.top .actions{margin-left:auto;display:flex;gap:6px}
+.back{display:none}
+.menu{position:absolute;right:12px;top:calc(100% + 4px);background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:6px;z-index:20;display:grid;min-width:250px}
+.menu button{border:none;text-align:left;border-radius:6px}
+.menu hr{border:none;border-top:1px solid var(--line);margin:4px 0}
+.layout{flex:1;display:grid;grid-template-columns:330px 1fr;min-height:0}
+#side{border-right:1px solid var(--line);overflow:auto;padding:14px 14px 40px;display:flex;flex-direction:column;gap:12px}
+#main{overflow:auto;padding:24px 28px 60px}
+.status{font-size:11.5px;color:var(--muted);padding:6px 16px;border-top:1px solid var(--line);background:var(--panel);display:flex;gap:12px;flex-wrap:wrap}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;padding:.15em .7em;border-radius:99px;background:var(--hover);border:1px solid transparent}
+.chip.on{background:var(--accent);color:var(--accent-ink)}
+.chip .n{opacity:.6;margin-left:3px}
+
+.cal{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:8px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px;margin-bottom:4px}
+.cal-head button{border:none;background:none;padding:.1em .6em}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal-grid .wd{font-size:11px;color:var(--muted)}
+.day{border:none;background:none;padding:4px 0;font-size:13px;border-radius:6px;position:relative}
+.day.has::after{content:"";position:absolute;left:50%;bottom:1px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--accent)}
+.day.today{font-weight:700;color:var(--accent)}
+.day.sel{background:var(--accent);color:var(--accent-ink)}
+.day.sel::after{background:var(--accent-ink)}
+
+.list{display:grid;gap:2px}
+.item{display:block;width:100%;text-align:left;border:none;background:none;border-radius:8px;padding:9px 10px}
+.item:hover{background:var(--hover)}
+.item.cur{background:var(--hover);box-shadow:inset 3px 0 0 var(--accent)}
+.item .d{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.item .t{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .s{font-size:12.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+mark{background:var(--mark);color:inherit;border-radius:2px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.m1{background:var(--m1)}.m2{background:var(--m2)}.m3{background:var(--m3)}.m4{background:var(--m4)}.m5{background:var(--m5)}
+
+/* viewer */
+.entry{max-width:720px;margin:0 auto}
+.entry .meta{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.entry h2{margin:6px 0 10px;font-size:24px;line-height:1.4}
+.entry .body{white-space:pre-wrap;word-break:break-word;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;font-size:16.5px;line-height:1.95;margin:18px 0}
+.entry .tools{display:flex;gap:8px;margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:16px 0}
+.gallery img,.thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;background:var(--hover);display:block}
+.gallery img{cursor:zoom-in}
+.empty{max-width:420px;margin:12vh auto 0;text-align:center;color:var(--muted)}
+.empty .big{font-size:40px;font-weight:700;color:var(--ink)}
+
+/* editor */
+.editor{max-width:720px;margin:0 auto;display:grid;gap:12px}
+.editor .row{display:flex;gap:8px}
+.editor .row input{width:auto}
+.title-in{font-size:19px;font-weight:600}
+.editor textarea{min-height:260px;resize:vertical;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;font-size:16.5px;line-height:1.9}
+.moods{display:flex;gap:6px;flex-wrap:wrap}
+.moods button{display:flex;align-items:center;gap:6px;font-size:13px;padding:.3em .8em;border-radius:99px}
+.moods button.on{border-color:var(--ink);font-weight:600}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.thumb{position:relative}
+.thumb button{position:absolute;top:4px;right:4px;width:24px;height:24px;padding:0;border-radius:50%;line-height:1;font-size:14px;background:rgba(0,0,0,.6);color:#fff;border:none}
+.addphoto{display:inline-flex;align-items:center;gap:6px;justify-self:start;border:1px dashed var(--line);border-radius:8px;padding:.45em .9em;cursor:pointer;font-size:14px}
+.addphoto:hover{background:var(--hover)}
+.ed-actions{display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:var(--bg);padding:10px 0}
+label.lbl{font-size:12px;color:var(--muted);margin-bottom:-6px}
+
+/* overlays */
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);display:grid;place-items:center;z-index:50;cursor:zoom-out;padding:16px}
+#lightbox img{max-width:100%;max-height:100%;border-radius:6px}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:grid;place-items:center;z-index:60;padding:16px}
+#modal .card{max-width:360px}
+#toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.55em 1.1em;border-radius:99px;font-size:13.5px;z-index:70;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.show{opacity:1}
+#busy{position:fixed;inset:0;background:rgba(0,0,0,.15);z-index:65;display:grid;place-items:center}
+#busy span{background:var(--panel);padding:.6em 1.2em;border-radius:99px;box-shadow:var(--shadow);font-size:13.5px}
+
+@media (max-width:760px){
+  .layout{display:block;overflow:auto}
+  #side{border-right:none;padding:12px 16px 40px;height:100%}
+  #main{display:none;padding:16px 16px 60px;height:100%}
+  body.m-main #side{display:none}
+  body.m-main #main{display:block}
+  body.m-main .back{display:inline-block}
+  body.m-main .brand{display:none}
+  .editor .row input{flex:1}
+}
+</style>
+</head>
+<body>
+
+<div id="lock">
+  <div class="card">
+    <h1>Local Diary</h1>
+    <p class="sub">この端末の中だけで動く、暗号化された日記</p>
+    <div id="lockBody"></div>
+    <div class="msg" id="lockMsg"></div>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header class="top">
+    <button class="back ghost" id="backBtn">‹ 一覧</button>
+    <div class="brand">Local Diary</div>
+    <div class="actions">
+      <button class="primary" id="newBtn">＋ 書く</button>
+      <button class="ghost" id="menuBtn" aria-label="メニュー">⋯</button>
+    </div>
+    <div class="menu" id="menu" hidden>
+      <button data-act="export">バックアップを書き出す（暗号化のまま）</button>
+      <button data-act="import">バックアップを取り込む（統合）</button>
+      <button data-act="plain">テキストで書き出す（平文・注意）</button>
+      <hr>
+      <button data-act="lock">ロックする</button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside id="side">
+      <input type="search" id="q" placeholder="検索（スペースで AND）">
+      <div class="chips" id="filters"></div>
+      <div class="cal" id="cal"></div>
+      <div class="list" id="list"></div>
+    </aside>
+    <main id="main"></main>
+  </div>
+  <div class="status" id="status"></div>
+  <input type="file" id="importFile" accept=".json,application/json" hidden>
+</div>
+
+<div id="lightbox" hidden><img alt=""></div>
+<div id="modal" hidden></div>
+<div id="busy" hidden><span>処理中…</span></div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* ============================================================
+   Local Diary — single-file, offline, encrypted diary
+   - 暗号: PBKDF2-SHA256 (600,000回) → AES-GCM 256bit（WebCrypto）
+   - 保存先: ① 選んだフォルダ（Windows/Mac の Chrome/Edge）
+             ② このブラウザ内（IndexedDB・スマホ向け）
+   - 通信は一切しない（CSP で外部接続を禁止）
+   ============================================================ */
+const APP = 'local-diary', VER = 1, ITER = 600000, LOCK_MIN = 10;
+const MOODS = [{v:1,l:'つらい'},{v:2,l:'いまいち'},{v:3,l:'ふつう'},{v:4,l:'いい'},{v:5,l:'最高'}];
+const WD = '日月火水木金土';
+const $ = s => document.querySelector(s);
+const TE = new TextEncoder(), TD = new TextDecoder();
+
+/* ---------- utils ---------- */
+const pad = n => String(n).padStart(2,'0');
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+const nowTime = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const stamp = () => todayStr().replace(/-/g,'');
+function fmtDate(s){ const [y,m,d] = s.split('-').map(Number); return `${y}/${pad(m)}/${pad(d)} (${WD[new Date(y,m-1,d).getDay()]})`; }
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => [...crypto.getRandomValues(new Uint8Array(12))].map(b => b.toString(16).padStart(2,'0')).join('');
+const moodLabel = v => MOODS.find(m => m.v === v)?.l || '';
+function parseTags(s){ return [...new Set(String(s).split(/[\s,、，]+/).map(t => t.replace(/^#/,'').trim()).filter(Boolean))]; }
+const B64 = {
+  from(buf){ const u = buf instanceof Uint8Array ? buf : new Uint8Array(buf); let s=''; for (let i=0;i<u.length;i+=0x8000) s += String.fromCharCode.apply(null, u.subarray(i,i+0x8000)); return btoa(s); },
+  to(str){ const s = atob(str), u = new Uint8Array(s.length); for (let i=0;i<s.length;i++) u[i] = s.charCodeAt(i); return u; }
+};
+function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 2200); }
+async function busy(fn){ $('#busy').hidden = false; try { return await fn(); } finally { $('#busy').hidden = true; } }
+const IS_IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+async function download(name, text, type){
+  if (IS_IOS && navigator.canShare) {
+    const file = new File([text], name, {type});
+    if (navigator.canShare({files:[file]})) {
+      try { await navigator.share({files:[file]}); return true; }
+      catch (e) { if (e.name === 'AbortError') return false; }
+    }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type})); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+
+/* ---------- crypto ---------- */
+let KEY = null, META = null;
+async function deriveKey(pw, salt, iter){
+  const base = await crypto.subtle.importKey('raw', TE.encode(pw), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:iter, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function seal(obj, key = KEY){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, TE.encode(JSON.stringify(obj))));
+  const out = new Uint8Array(12 + ct.length); out.set(iv); out.set(ct, 12); return B64.from(out);
+}
+async function unseal(str, key = KEY){
+  const u = B64.to(str);
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:u.subarray(0,12)}, key, u.subarray(12));
+  return JSON.parse(TD.decode(pt));
+}
+async function checkKey(meta, key){ try { return (await unseal(meta.check, key)) === 'ok'; } catch { return false; } }
+
+/* ---------- storage ---------- */
+function idbOpen(){ return new Promise((res, rej) => {
+  const r = indexedDB.open(APP, 1);
+  r.onupgradeneeded = () => { r.result.createObjectStore('kv'); r.result.createObjectStore('sys'); };
+  r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+}); }
+async function idbDo(name, mode, fn){
+  const db = await idbOpen();
+  return new Promise((res, rej) => {
+    const t = db.transaction(name, mode); const req = fn(t.objectStore(name));
+    t.oncomplete = () => res(req ? req.result : undefined); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error);
+  });
+}
+const sysGet = k => idbDo('sys','readonly', s => s.get(k));
+const sysPut = (k, v) => idbDo('sys','readwrite', s => s.put(v, k));
+const sysDel = k => idbDo('sys','readwrite', s => s.delete(k));
+
+const browserStore = {
+  kind: 'browser', label: 'このブラウザ内',
+  get: k => idbDo('kv','readonly', s => s.get(k)),
+  put: (k, v) => idbDo('kv','readwrite', s => s.put(v, k)),
+  del: k => idbDo('kv','readwrite', s => s.delete(k)),
+  async keys(p){ return (await idbDo('kv','readonly', s => s.getAllKeys())).filter(k => k.startsWith(p + '/')); }
+};
+const FDIR = {e:'entries', p:'photos'};
+function folderStore(dir){
+  async function loc(k, create){
+    if (k === 'meta') return [dir, 'diary-meta.json'];
+    const [p, id] = k.split('/');
+    return [await dir.getDirectoryHandle(FDIR[p], {create}), id + '.enc'];
+  }
+  return {
+    kind: 'folder', label: 'フォルダ「' + dir.name + '」', dir,
+    async get(k){ try { const [d, n] = await loc(k, false); return await (await (await d.getFileHandle(n)).getFile()).text(); }
+                 catch (e) { if (e.name === 'NotFoundError') return undefined; throw e; } },
+    async put(k, v){ const [d, n] = await loc(k, true); const w = await (await d.getFileHandle(n, {create:true})).createWritable(); await w.write(v); await w.close(); },
+    async del(k){ try { const [d, n] = await loc(k, false); await d.removeEntry(n); } catch {} },
+    async keys(p){ try { const d = await dir.getDirectoryHandle(FDIR[p]); const out = [];
+                   for await (const [name, h] of d.entries()) if (h.kind === 'file' && name.endsWith('.enc')) out.push(p + '/' + name.slice(0, -4));
+                   return out; } catch { return []; } }
+  };
+}
+let store = null;
+
+/* ---------- lock screen ---------- */
+function lockMsg(t){ $('#lockMsg').textContent = t || ''; }
+function showLock(state){
+  lockMsg('');
+  const b = $('#lockBody');
+  if (state === 'choose') {
+    const canFolder = 'showDirectoryPicker' in window;
+    b.innerHTML = `<div class="stack">
+      <p class="small muted" style="margin:0">日記をどこに保存するか選んでください。</p>
+      ${canFolder ? `<button class="choice" id="cFolder"><b>フォルダに保存（PC推奨）</b><span>選んだフォルダに暗号化ファイルとして保存。フォルダごとコピーすればバックアップになります。</span></button>` : ''}
+      <button class="choice" id="cBrowser"><b>このブラウザ内に保存${canFolder ? '' : '（この端末で使える方式）'}</b><span>スマホ向け。ブラウザのデータを消すと日記も消えるので、定期的にバックアップを書き出してください。</span></button>
+    </div>`;
+    if (canFolder) $('#cFolder').onclick = async () => {
+      try {
+        const h = await showDirectoryPicker({id:'local-diary', mode:'readwrite'});
+        await sysPut('mode','folder'); await sysPut('dir', h); store = folderStore(h);
+        showLock(await store.get('meta') ? 'unlock' : 'create');
+      } catch (e) { if (e.name !== 'AbortError') lockMsg('フォルダを開けませんでした: ' + e.message); }
+    };
+    $('#cBrowser').onclick = async () => {
+      await sysPut('mode','browser'); store = browserStore;
+      try { await navigator.storage?.persist?.(); } catch {}
+      showLock(await store.get('meta') ? 'unlock' : 'create');
+    };
+    return;
+  }
+  const where = `<p class="small muted" style="margin:0">保存先: ${esc(store.label)}</p>`;
+  const change = `<button type="button" class="linkish" id="chg">保存先を変える</button>`;
+  if (state === 'create') {
+    b.innerHTML = `<form id="fCreate">
+      ${where}
+      <input type="password" name="pw" placeholder="パスワード（8文字以上）" autocomplete="new-password" required>
+      <input type="password" name="pw2" placeholder="もう一度" autocomplete="new-password" required>
+      <div class="note">パスワードを忘れると<b>誰にも復元できません</b>（作った人も含め）。紙に書いて保管するなど、確実に覚えておける方法で。</div>
+      <button class="primary">日記をはじめる</button>
+      <button type="button" class="linkish" id="restore">バックアップファイルから復元する</button>
+      ${change}
+    </form>`;
+    $('#fCreate').onsubmit = async ev => {
+      ev.preventDefault(); const f = ev.target;
+      if (f.pw.value.length < 8) return lockMsg('8文字以上にしてください');
+      if (f.pw.value !== f.pw2.value) return lockMsg('2つのパスワードが一致しません');
+      await busy(async () => {
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        KEY = await deriveKey(f.pw.value, salt, ITER);
+        META = {app:APP, v:VER, salt:B64.from(salt), iter:ITER, check: await seal('ok'), createdAt: Date.now()};
+        await store.put('meta', JSON.stringify(META));
+      });
+      enterApp();
+    };
+    $('#restore').onclick = () => pickFile(async file => {
+      try {
+        const bk = JSON.parse(await file.text());
+        if (bk.format !== APP + '-backup') throw new Error('このツールのバックアップではありません');
+        if (await store.get('meta')) throw new Error('すでに日記があります');
+        await busy(async () => {
+          await store.put('meta', JSON.stringify(bk.meta));
+          for (const [k, v] of Object.entries(bk.records)) await store.put(k, v);
+        });
+        showLock('unlock'); lockMsg(''); toast('復元しました。バックアップ時のパスワードで開いてください');
+      } catch (e) { lockMsg('復元できませんでした: ' + e.message); }
+    });
+  } else {
+    b.innerHTML = `<form id="fUnlock">
+      ${where}
+      <input type="password" name="pw" placeholder="パスワード" autocomplete="current-password" required autofocus>
+      <button class="primary">開く</button>
+      ${change}
+    </form>`;
+    $('#fUnlock').onsubmit = async ev => {
+      ev.preventDefault(); const pw = ev.target.pw.value;
+      try {
+        if (store.kind === 'folder') {
+          const opt = {mode:'readwrite'};
+          if ((await store.dir.queryPermission(opt)) !== 'granted' && (await store.dir.requestPermission(opt)) !== 'granted')
+            return lockMsg('フォルダへのアクセスが許可されませんでした');
+        }
+        const raw = await store.get('meta');
+        if (!raw) return showLock('create');
+        META = JSON.parse(raw);
+        const ok = await busy(async () => { KEY = await deriveKey(pw, B64.to(META.salt), META.iter); return checkKey(META, KEY); });
+        if (!ok) { KEY = null; ev.target.pw.value = ''; return lockMsg('パスワードが違います'); }
+        enterApp();
+      } catch (e) { lockMsg('開けませんでした: ' + e.message); }
+    };
+    setTimeout(() => $('#fUnlock [name=pw]')?.focus(), 50);
+  }
+  $('#chg').onclick = async () => { await sysDel('mode'); await sysDel('dir'); store = null; showLock('choose'); };
+}
+function pickFile(cb){ const i = document.createElement('input'); i.type = 'file'; i.accept = '.json,application/json'; i.onchange = () => i.files[0] && cb(i.files[0]); i.click(); }
+
+/* ---------- state ---------- */
+const ENTRIES = new Map(), PHOTOS = new Map();
+const ui = {q:'', tag:null, date:null, month:null, current:null, mode:'view'};
+let ed = null, dirty = false;
+
+async function enterApp(){
+  $('#lock').hidden = true; $('#app').hidden = false;
+  await busy(loadAll);
+  const d = new Date(); ui.month = [d.getFullYear(), d.getMonth()];
+  renderAll();
+  startAutoLock();
+}
+async function loadAll(){
+  ENTRIES.clear();
+  const keys = await store.keys('e');
+  for (let i = 0; i < keys.length; i += 24) {
+    await Promise.all(keys.slice(i, i + 24).map(async k => {
+      try { const e = await unseal(await store.get(k)); ENTRIES.set(e.id, e); } catch (err) { console.warn('skip', k, err); }
+    }));
+  }
+}
+async function getPhoto(id){
+  if (PHOTOS.has(id)) return PHOTOS.get(id);
+  const v = await store.get('p/' + id); if (!v) return null;
+  const url = await unseal(v); PHOTOS.set(id, url); return url;
+}
+const live = () => [...ENTRIES.values()].filter(e => !e.deleted);
+
+/* ---------- render ---------- */
+function renderAll(){ renderFilters(); renderCal(); renderList(); renderMain(); renderStatus(); }
+function visible(){
+  const terms = ui.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  return live()
+    .filter(e => !ui.tag || e.tags.includes(ui.tag))
+    .filter(e => !ui.date || e.date === ui.date)
+    .filter(e => { if (!terms.length) return true; const h = (e.title + '\n' + e.body + '\n' + e.tags.join(' ')).toLowerCase(); return terms.every(t => h.includes(t)); })
+    .sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time) || b.createdAt - a.createdAt);
+}
+function highlight(text, terms){
+  let h = esc(text);
+  for (const t of terms) { const re = new RegExp(esc(t).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'); h = h.replace(re, m => `<mark>${m}</mark>`); }
+  return h;
+}
+function snippet(e, terms){
+  const body = e.body.replace(/\s+/g, ' ');
+  if (!terms.length) return esc(body.slice(0, 90));
+  const i = body.toLowerCase().indexOf(terms[0]);
+  const s = i < 0 ? 0 : Math.max(0, i - 30);
+  return (s > 0 ? '…' : '') + highlight(body.slice(s, s + 90), terms);
+}
+function tagCounts(){ const m = new Map(); for (const e of live()) for (const t of e.tags) m.set(t, (m.get(t) || 0) + 1); return [...m].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])); }
+function renderFilters(){
+  let h = '';
+  if (ui.date) h += `<button class="chip on" data-clear="date">${esc(fmtDate(ui.date))} ×</button>`;
+  for (const [t, n] of tagCounts()) h += `<button class="chip ${ui.tag === t ? 'on' : ''}" data-tag="${esc(t)}">#${esc(t)}<span class="n">${n}</span></button>`;
+  $('#filters').innerHTML = h;
+}
+function renderCal(){
+  const [y, m] = ui.month, first = new Date(y, m, 1).getDay(), days = new Date(y, m + 1, 0).getDate(), today = todayStr();
+  const has = new Set(live().map(e => e.date));
+  let h = `<div class="cal-head"><button data-cal="-1" aria-label="前の月">‹</button><span>${y}年${m + 1}月</span><button data-cal="1" aria-label="次の月">›</button></div><div class="cal-grid">`;
+  h += [...WD].map(w => `<div class="wd">${w}</div>`).join('') + '<div></div>'.repeat(first);
+  for (let d = 1; d <= days; d++) {
+    const ds = `${y}-${pad(m + 1)}-${pad(d)}`;
+    h += `<button class="day ${has.has(ds) ? 'has' : ''} ${ds === today ? 'today' : ''} ${ds === ui.date ? 'sel' : ''}" data-day="${ds}">${d}</button>`;
+  }
+  $('#cal').innerHTML = h + '</div>';
+}
+function renderList(){
+  const terms = ui.q.trim().toLowerCase().split(/\s+/).filter(Boolean), list = visible();
+  $('#list').innerHTML = list.length ? list.map(e => `
+    <button class="item ${e.id === ui.current ? 'cur' : ''}" data-id="${e.id}">
+      <div class="d">${e.mood ? `<span class="dot m${e.mood}"></span>` : ''}${esc(fmtDate(e.date))} ${esc(e.time || '')}${e.photos.length ? ` · 写真${e.photos.length}` : ''}</div>
+      ${e.title ? `<div class="t">${highlight(e.title, terms)}</div>` : ''}
+      <div class="s">${snippet(e, terms)}</div>
+    </button>`).join('')
+    : `<p class="small muted" style="text-align:center;margin-top:16px">${live().length ? '該当する記録はありません' : 'まだ記録がありません'}</p>`;
+}
+function renderStatus(){
+  const n = live().length, ym = todayStr().slice(0, 7), month = live().filter(e => e.date.startsWith(ym)).length;
+  $('#status').innerHTML = `<span>保存先: ${esc(store.label)}</span><span>${n}件（今月${month}件）</span><span id="bkInfo"></span><span>${LOCK_MIN}分操作がないと自動ロック</span>`;
+  sysGet('lastExport').then(t => {
+    const el = $('#bkInfo'); if (!el) return;
+    const days = t ? Math.floor((Date.now() - t) / 86400000) : null;
+    el.textContent = days === null ? '最終バックアップ: まだ' : `最終バックアップ: ${days === 0 ? '今日' : days + '日前'}`;
+    if (store.kind === 'browser' && n && (days === null || days >= 14)) { el.style.color = 'var(--danger)'; el.textContent += '（書き出し推奨）'; }
+  }).catch(() => {});
+}
+function renderMain(){
+  const main = $('#main');
+  if (ui.mode === 'edit') return renderEditor();
+  const e = ENTRIES.get(ui.current);
+  if (!e || e.deleted) {
+    const n = live().length;
+    main.innerHTML = `<div class="empty"><div class="big">${n}</div><p>件の記録</p><p class="small">左のカレンダーや一覧から選ぶか、「＋ 書く」からどうぞ。</p></div>`;
+    return;
+  }
+  main.innerHTML = `<article class="entry">
+    <div class="meta">${esc(fmtDate(e.date))} ${esc(e.time || '')}${e.mood ? ` · <span class="dot m${e.mood}"></span>${esc(moodLabel(e.mood))}` : ''}</div>
+    ${e.title ? `<h2>${esc(e.title)}</h2>` : ''}
+    ${e.tags.length ? `<div class="chips">${e.tags.map(t => `<button class="chip" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')}</div>` : ''}
+    <div class="body">${esc(e.body)}</div>
+    ${e.photos.length ? `<div class="gallery">${e.photos.map(p => `<img data-pid="${p}" alt="">`).join('')}</div>` : ''}
+    <div class="tools"><button data-act="edit">編集</button><button class="danger ghost" data-act="delete">削除</button></div>
+  </article>`;
+  fillImgs(main);
+}
+async function fillImgs(root){
+  for (const img of root.querySelectorAll('img[data-pid]')) {
+    try { const u = await getPhoto(img.dataset.pid); if (u && img.isConnected) img.src = u; } catch {}
+  }
+}
+
+/* ---------- editor ---------- */
+function openEditor(entry){
+  ed = entry
+    ? {id:entry.id, date:entry.date, time:entry.time, title:entry.title, body:entry.body, tags:entry.tags.join(' '), mood:entry.mood, photos:entry.photos.map(id => ({id, isNew:false})), removed:[]}
+    : {id:uid(), date: ui.date || todayStr(), time:nowTime(), title:'', body:'', tags:'', mood:0, photos:[], removed:[], isNewEntry:true};
+  dirty = false; ui.mode = 'edit'; document.body.classList.add('m-main'); renderMain();
+  setTimeout(() => $('#ed [name=body]')?.focus(), 30);
+}
+function renderEditor(){
+  const known = tagCounts().map(([t]) => t).slice(0, 20);
+  $('#main').innerHTML = `<form class="editor" id="ed" autocomplete="off">
+    <div class="row"><input type="date" name="date" value="${esc(ed.date)}" required><input type="time" name="time" value="${esc(ed.time)}"></div>
+    <input name="title" class="title-in" placeholder="タイトル（任意）" value="${esc(ed.title)}">
+    <label class="lbl">気分</label>
+    <div class="moods">${MOODS.map(m => `<button type="button" data-mood="${m.v}" class="${ed.mood === m.v ? 'on' : ''}"><span class="dot m${m.v}"></span>${m.l}</button>`).join('')}</div>
+    <textarea name="body" placeholder="今日のこと">${esc(ed.body)}</textarea>
+    <input name="tags" placeholder="タグ（スペース区切り）例: 仕事 家族 ゴルフ" value="${esc(ed.tags)}">
+    ${known.length ? `<div class="chips">${known.map(t => `<button type="button" class="chip" data-addtag="${esc(t)}">#${esc(t)}</button>`).join('')}</div>` : ''}
+    <div class="thumbs" id="thumbs"></div>
+    <label class="addphoto">＋ 写真を追加<input type="file" id="photoIn" accept="image/*" multiple hidden></label>
+    <p class="small muted" style="margin:0">写真は長辺1600pxに縮小し、位置情報などのメタデータを除いてから暗号化して保存します。</p>
+    <div class="ed-actions"><button type="button" data-act="cancel">キャンセル</button><button class="primary">保存（${/Mac|iPhone|iPad/.test(navigator.platform) ? "⌘S" : "Ctrl+S"}）</button></div>
+  </form>`;
+  renderThumbs();
+  const f = $('#ed');
+  f.oninput = () => { dirty = true; };
+  f.onsubmit = ev => { ev.preventDefault(); saveEntry(); };
+  $('#photoIn').onchange = async ev => {
+    const files = [...ev.target.files]; ev.target.value = '';
+    await busy(async () => { for (const file of files) { try { const url = await compress(file); const id = uid(); PHOTOS.set(id, url); ed.photos.push({id, isNew:true}); dirty = true; } catch { toast('読み込めない画像がありました'); } } });
+    renderThumbs();
+  };
+}
+function renderThumbs(){
+  const box = $('#thumbs'); if (!box) return;
+  box.innerHTML = ed.photos.map((p, i) => `<div class="thumb"><img data-pid="${p.id}" alt=""><button type="button" data-rmphoto="${i}" aria-label="削除">×</button></div>`).join('');
+  fillImgs(box);
+}
+async function compress(file){
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const s = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.82);
+  } finally { URL.revokeObjectURL(url); }
+}
+async function saveEntry(){
+  const f = $('#ed');
+  const title = f.title.value.trim(), body = f.body.value.replace(/\s+$/, '');
+  if (!title && !body.trim() && !ed.photos.length) return toast('中身が空です');
+  if (!f.date.value) return toast('日付を入れてください');
+  await busy(async () => {
+    for (const p of ed.photos) if (p.isNew) { await store.put('p/' + p.id, await seal(PHOTOS.get(p.id))); p.isNew = false; }
+    const prev = ENTRIES.get(ed.id), now = Date.now();
+    const e = {id:ed.id, date:f.date.value, time:f.time.value, title, body, tags:parseTags(f.tags.value), mood:ed.mood || 0,
+               photos:ed.photos.map(p => p.id), createdAt: prev?.createdAt || now, updatedAt: now};
+    await store.put('e/' + e.id, await seal(e));
+    for (const pid of ed.removed) await store.del('p/' + pid);
+    ENTRIES.set(e.id, e); ui.current = e.id;
+    const [y, m] = e.date.split('-').map(Number); ui.month = [y, m - 1];
+  });
+  ui.mode = 'view'; dirty = false; ed = null; renderAll(); toast('保存しました');
+}
+function leaveEditor(){
+  if (ui.mode === 'edit' && dirty && !confirm('保存していない変更があります。破棄しますか？')) return false;
+  if (ui.mode === 'edit') { for (const p of ed.photos) if (p.isNew) PHOTOS.delete(p.id); ui.mode = 'view'; dirty = false; ed = null; }
+  return true;
+}
+async function deleteEntry(id){
+  const e = ENTRIES.get(id); if (!e || !confirm('この記録を削除しますか？（元に戻せません）')) return;
+  await busy(async () => {
+    for (const pid of e.photos) await store.del('p/' + pid);
+    const tomb = {id, deleted:true, updatedAt:Date.now()};
+    await store.put('e/' + id, await seal(tomb)); ENTRIES.set(id, tomb);
+  });
+  ui.current = null; document.body.classList.remove('m-main'); renderAll(); toast('削除しました');
+}
+
+/* ---------- backup ---------- */
+async function exportBackup(){
+  const text = await busy(async () => {
+    const records = {};
+    for (const k of [...await store.keys('e'), ...await store.keys('p')]) records[k] = await store.get(k);
+    return JSON.stringify({format: APP + '-backup', v:VER, exportedAt:new Date().toISOString(), meta:META, records});
+  });
+  if (await download(`diary-backup-${stamp()}.json`, text, 'application/json') === false) return;
+  await sysPut('lastExport', Date.now()); renderStatus();
+  toast('書き出しました（中身は暗号化されたまま）');
+}
+function askPassword(title){
+  return new Promise(res => {
+    const m = $('#modal');
+    m.innerHTML = `<form class="card stack" id="pwf"><b>${esc(title)}</b><input type="password" name="pw" placeholder="パスワード" required>
+      <div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" id="pwc">やめる</button><button class="primary">OK</button></div></form>`;
+    m.hidden = false; setTimeout(() => m.querySelector('input').focus(), 30);
+    const done = v => { m.hidden = true; m.innerHTML = ''; res(v); };
+    $('#pwc').onclick = () => done(null);
+    $('#pwf').onsubmit = ev => { ev.preventDefault(); done(ev.target.pw.value); };
+  });
+}
+async function importBackup(file){
+  let bk;
+  try { bk = JSON.parse(await file.text()); if (bk.format !== APP + '-backup') throw 0; } catch { return toast('このツールのバックアップファイルではありません'); }
+  let bkKey = null;
+  if (bk.meta.salt === META.salt && bk.meta.iter === META.iter && await checkKey(bk.meta, KEY)) bkKey = KEY;
+  if (!bkKey) {
+    const pw = await askPassword('バックアップ作成時のパスワード'); if (!pw) return;
+    const k = await busy(() => deriveKey(pw, B64.to(bk.meta.salt), bk.meta.iter));
+    if (!await checkKey(bk.meta, k)) return toast('パスワードが違います');
+    bkKey = k;
+  }
+  const r = await busy(async () => {
+    let added = 0, updated = 0;
+    for (const [k, v] of Object.entries(bk.records)) {
+      if (!k.startsWith('e/')) continue;
+      let inc; try { inc = await unseal(v, bkKey); } catch { continue; }
+      const cur = ENTRIES.get(inc.id);
+      if (cur && cur.updatedAt >= inc.updatedAt) continue;
+      if (!inc.deleted) for (const pid of inc.photos) {
+        if (await store.get('p/' + pid)) continue;
+        const pv = bk.records['p/' + pid]; if (pv) await store.put('p/' + pid, await seal(await unseal(pv, bkKey)));
+      }
+      if (cur && !cur.deleted) for (const pid of cur.photos) if (inc.deleted || !inc.photos.includes(pid)) await store.del('p/' + pid);
+      await store.put('e/' + inc.id, await seal(inc)); ENTRIES.set(inc.id, inc);
+      cur ? updated++ : (!inc.deleted && added++);
+    }
+    return {added, updated};
+  });
+  renderAll(); toast(`取り込み完了：追加${r.added}件・更新${r.updated}件`);
+}
+function exportPlain(){
+  if (!confirm('暗号化されていないテキストファイルを書き出します。\n保管場所に注意してください。続けますか？')) return;
+  const list = live().sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  const md = '# Local Diary\n\n' + list.map(e =>
+    `## ${fmtDate(e.date)} ${e.time || ''}${e.title ? ' ' + e.title : ''}\n` +
+    [e.mood ? '気分: ' + moodLabel(e.mood) : '', e.tags.length ? 'タグ: ' + e.tags.map(t => '#' + t).join(' ') : '', e.photos.length ? `写真: ${e.photos.length}枚` : ''].filter(Boolean).join(' / ') +
+    `\n\n${e.body}\n`).join('\n');
+  download(`diary-${stamp()}.md`, md, 'text/markdown');
+}
+
+/* ---------- auto lock ---------- */
+let lastAct = Date.now();
+function startAutoLock(){
+  ['pointerdown', 'keydown', 'input', 'scroll', 'touchstart'].forEach(ev => addEventListener(ev, () => { lastAct = Date.now(); }, {passive:true, capture:true}));
+  const check = () => { if (KEY && Date.now() - lastAct > LOCK_MIN * 60000) lock(); };
+  setInterval(check, 15000); document.addEventListener('visibilitychange', check);
+}
+function lock(){ dirty = false; KEY = null; ENTRIES.clear(); PHOTOS.clear(); location.reload(); }
+
+/* ---------- events ---------- */
+$('#q').addEventListener('input', ev => { ui.q = ev.target.value; renderList(); });
+$('#newBtn').onclick = () => { if (!leaveEditor()) return; openEditor(null); renderList(); };
+$('#backBtn').onclick = () => { if (!leaveEditor()) return; document.body.classList.remove('m-main'); renderMain(); };
+$('#menuBtn').onclick = ev => { ev.stopPropagation(); $('#menu').hidden = !$('#menu').hidden; };
+document.addEventListener('click', () => { $('#menu').hidden = true; });
+$('#menu').onclick = ev => {
+  const a = ev.target.closest('[data-act]')?.dataset.act;
+  if (a === 'export') exportBackup();
+  if (a === 'import') $('#importFile').click();
+  if (a === 'plain') exportPlain();
+  if (a === 'lock') { if (leaveEditor()) lock(); }
+};
+$('#importFile').onchange = ev => { const f = ev.target.files[0]; ev.target.value = ''; if (f) importBackup(f); };
+$('#side').addEventListener('click', ev => {
+  const t = ev.target.closest('button'); if (!t) return;
+  if (t.dataset.cal) { let [y, m] = ui.month; m += +t.dataset.cal; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } ui.month = [y, m]; return renderCal(); }
+  if (t.dataset.day) { ui.date = ui.date === t.dataset.day ? null : t.dataset.day; renderFilters(); renderCal(); return renderList(); }
+  if (t.dataset.clear) { ui.date = null; renderFilters(); renderCal(); return renderList(); }
+  if (t.dataset.tag) { ui.tag = ui.tag === t.dataset.tag ? null : t.dataset.tag; renderFilters(); return renderList(); }
+  if (t.dataset.id) { if (!leaveEditor()) return; ui.current = t.dataset.id; document.body.classList.add('m-main'); renderList(); renderMain(); $('#main').scrollTop = 0; }
+});
+$('#main').addEventListener('click', ev => {
+  const img = ev.target.closest('.gallery img');
+  if (img && img.src) { $('#lightbox img').src = img.src; $('#lightbox').hidden = false; return; }
+  const t = ev.target.closest('button'); if (!t) return;
+  const act = t.dataset.act;
+  if (act === 'edit') openEditor(ENTRIES.get(ui.current));
+  if (act === 'delete') deleteEntry(ui.current);
+  if (act === 'cancel') { if (leaveEditor()) { if (!ENTRIES.get(ui.current)) document.body.classList.remove('m-main'); renderMain(); } }
+  if (t.dataset.mood) { const v = +t.dataset.mood; ed.mood = ed.mood === v ? 0 : v; dirty = true; t.parentElement.querySelectorAll('button').forEach(b => b.classList.toggle('on', +b.dataset.mood === ed.mood)); }
+  if (t.dataset.addtag) { const inp = $('#ed [name=tags]'); const tags = parseTags(inp.value); if (!tags.includes(t.dataset.addtag)) { tags.push(t.dataset.addtag); inp.value = tags.join(' '); dirty = true; } }
+  if (t.dataset.rmphoto) { const [p] = ed.photos.splice(+t.dataset.rmphoto, 1); if (!p.isNew) ed.removed.push(p.id); else PHOTOS.delete(p.id); dirty = true; renderThumbs(); }
+});
+$('#lightbox').onclick = () => { $('#lightbox').hidden = true; $('#lightbox img').src = ''; };
+document.addEventListener('keydown', ev => {
+  if ((ev.metaKey || ev.ctrlKey) && ev.key === 's' && ui.mode === 'edit') { ev.preventDefault(); saveEntry(); }
+  if (ev.key === 'Escape') { $('#lightbox').hidden = true; }
+});
+addEventListener('beforeunload', ev => { if (dirty) { ev.preventDefault(); ev.returnValue = ''; } });
+
+/* ---------- boot ---------- */
+if (location.protocol === 'https:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+(async function boot(){
+  if (!window.crypto?.subtle || !window.indexedDB) {
+    $('#lockBody').innerHTML = '';
+    return lockMsg('この開き方では暗号化機能が使えません。Chrome / Safari でファイルを直接開くか、https で配信してください。');
+  }
+  try {
+    const mode = await sysGet('mode');
+    if (mode === 'folder') { const h = await sysGet('dir'); if (h) { store = folderStore(h); return showLock('unlock'); } }
+    if (mode === 'browser') { store = browserStore; return showLock(await store.get('meta') ? 'unlock' : 'create'); }
+  } catch (e) { console.warn(e); }
+  showLock('choose');
+})();
+</script>
+</body>
+</html>
