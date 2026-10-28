@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>あかもく・めかぶ・もずくの違い｜図解でわかる3つのネバネバ海藻</title>
+<meta name="description" content="あかもく・めかぶ・もずくの違いを、正体・栄養・価格・健康効果のエビデンス・食べ方までインフォグラフィックで比較。文部科学省の食品成分表と論文をもとに整理しました。">
+<meta property="og:title" content="あかもく・めかぶ・もずくの違い｜図解でわかる3つのネバネバ海藻">
+<meta property="og:description" content="正体・栄養・価格・健康効果・食べ方をまとめて比較。">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#F5F3EC; --paper:#FFFFFF; --ink:#18201C; --muted:#57605A; --line:#DCD8CC;
+  --sea:#0F3B3A; --sea-2:#E3EEEA;
+  --akamoku:#8A5A1F; --akamoku-bg:#F6EBDC;
+  --mekabu:#2F6B3A; --mekabu-bg:#E2EFE3;
+  --mozuku:#1F5C73; --mozuku-bg:#DFEDF2;
+  --warn:#9A4A12; --warn-bg:#FBEEDD;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--sea)} a:hover{color:#06201F}
+h1,h2,h3{font-family:"Noto Serif JP",serif;line-height:1.35;margin:0}
+p{margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.sec{padding:72px 0;border-top:1px solid var(--line)}
+.sec-head{margin-bottom:32px}
+.kicker{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--sea);margin-bottom:8px}
+.sec h2{font-size:clamp(24px,3.4vw,34px);font-weight:900}
+.lead{margin-top:12px;color:var(--muted);max-width:720px}
+.tag-a{color:var(--akamoku)} .tag-m{color:var(--mekabu)} .tag-z{color:var(--mozuku)}
+.note{font-size:13px;color:var(--muted);margin-top:16px;line-height:1.7}
+
+/* hero */
+.hero{background:var(--sea);color:#F2F7F5;padding:72px 0 64px}
+.hero .kicker{color:#A9D3C6}
+.hero h1{font-size:clamp(30px,5.4vw,56px);font-weight:900;letter-spacing:.01em}
+.hero p.sub{margin-top:18px;max-width:680px;color:#CFE3DC;font-size:17px}
+.trio{display:flex;flex-wrap:wrap;gap:16px;margin-top:44px}
+.trio .card{flex:1 1 280px;background:var(--paper);color:var(--ink);border-radius:14px;padding:24px}
+.card .name{font-family:"Noto Serif JP",serif;font-size:30px;font-weight:900}
+.card .sci{font-size:13px;color:var(--muted);font-style:italic}
+.card .what{margin-top:12px;font-weight:700}
+.card .chip{display:inline-block;margin-top:14px;font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px}
+.card.a .name{color:var(--akamoku)} .card.a .chip{background:var(--akamoku-bg);color:var(--akamoku)}
+.card.m .name{color:var(--mekabu)} .card.m .chip{background:var(--mekabu-bg);color:var(--mekabu)}
+.card.z .name{color:var(--mozuku)} .card.z .chip{background:var(--mozuku-bg);color:var(--mozuku)}
+.hero .src{margin-top:28px;font-size:13px;color:#A9C7BE}
+
+/* tree */
+.tree{background:var(--paper);border-radius:16px;padding:28px 24px}
+.tree .root{text-align:center}
+.pill{display:inline-block;padding:8px 18px;border-radius:999px;font-weight:700;font-size:15px}
+.root .pill{background:var(--sea);color:#fff}
+.branches{display:flex;flex-wrap:wrap;gap:16px;margin-top:22px}
+.branch{flex:1 1 280px;border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+.branch .order{font-size:13px;color:var(--muted);font-weight:700}
+.branch .stem{width:2px;height:18px;background:var(--line);margin:10px auto}
+.sp{border-radius:10px;padding:12px}
+.sp b{display:block;font-family:"Noto Serif JP",serif;font-size:20px}
+.sp i{font-size:12px;color:var(--muted)}
+.sp.a{background:var(--akamoku-bg)} .sp.a b{color:var(--akamoku)}
+.sp.m{background:var(--mekabu-bg)} .sp.m b{color:var(--mekabu)}
+.sp.z{background:var(--mozuku-bg)} .sp.z b{color:var(--mozuku)}
+.sp.wakame{background:#F0F3EF;border:1px dashed var(--mekabu)}
+.sp.wakame b{color:var(--ink);font-size:17px}
+.sp + .sp{margin-top:8px}
+.callout{margin-top:24px;background:var(--sea-2);border-radius:12px;padding:18px 20px;font-weight:500}
+.callout strong{color:var(--sea)}
+
+/* bars */
+.bars{display:flex;flex-wrap:wrap;gap:16px}
+.metric{flex:1 1 300px;background:var(--paper);border-radius:14px;padding:20px 22px}
+.metric h3{font-family:"Noto Sans JP",sans-serif;font-size:15px;font-weight:700}
+.metric h3 span{font-weight:400;color:var(--muted);font-size:13px;margin-left:6px}
+.row{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px}
+.row .lbl{flex:0 0 74px;font-weight:700}
+.row .track{flex:1;height:22px;background:#EEEBE2;border-radius:6px;overflow:hidden}
+.row .fill{height:100%;border-radius:6px}
+.row .val{flex:0 0 72px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.fill.m{background:var(--mekabu)} .fill.z{background:var(--mozuku)}
+.row.na .track{background:repeating-linear-gradient(45deg,#EEEBE2 0 8px,#E4E0D5 8px 16px)}
+.row.na .val{font-weight:400;font-size:12px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:18px;font-size:14px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.warnbox{margin-top:20px;background:var(--warn-bg);border-radius:12px;padding:16px 20px;font-size:15px}
+.warnbox strong{color:var(--warn)}
+
+/* components grid */
+.comp{background:var(--paper);border-radius:16px;overflow-x:auto}
+.comp table{width:100%;min-width:640px;border-collapse:collapse;font-size:14px}
+.comp th,.comp td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.comp thead th{font-size:15px}
+.comp tbody th{white-space:nowrap}
+.comp tr:last-child td,.comp tr:last-child th{border-bottom:0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.hl{font-weight:700}
+
+/* price */
+.price{background:var(--paper);border-radius:16px;padding:28px 24px}
+.scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:0 0 6px 96px;font-variant-numeric:tabular-nums}
+.prow{display:flex;align-items:center;gap:12px;margin-top:14px}
+.prow .lbl{flex:0 0 84px;font-weight:700}
+.prow .track{flex:1;position:relative;height:30px;background:repeating-linear-gradient(90deg,#F1EEE6 0 calc(16.666% - 1px),#E2DED3 calc(16.666% - 1px) 16.666%);border-radius:6px}
+.prow .range{position:absolute;top:4px;bottom:4px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;white-space:nowrap}
+.range.z{background:var(--mozuku);left:16.67%;width:26.67%}
+.range.m{background:var(--mekabu);left:41.67%;width:25%}
+.range.a{background:var(--akamoku);left:36.67%;width:55%}
+.season{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px}
+.season div{flex:1 1 280px;background:var(--paper);border-radius:12px;padding:18px 20px;font-size:15px}
+.season b{display:block;font-size:16px;margin-bottom:4px}
+
+/* evidence */
+.ev{background:var(--paper);border-radius:16px;overflow-x:auto}
+.ev table{width:100%;min-width:720px;border-collapse:collapse;font-size:14px}
+.ev th,.ev td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}
+.ev tbody th{text-align:left;white-space:nowrap}
+.ev tr:last-child td,.ev tr:last-child th{border-bottom:0}
+.lv{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;line-height:1.5}
+.lv3{background:#0F3B3A;color:#fff}
+.lv2{background:#4E7F76;color:#fff}
+.lv1{background:#DDE8E4;color:#1E4741}
+.lv0{background:#EEEBE2;color:#57605A}
+.evleg{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px;font-size:13px;align-items:center}
+.pyramid{display:flex;flex-direction:column;align-items:center;gap:6px;margin:0 auto 28px;max-width:560px}
+.pyramid div{text-align:center;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:#fff}
+.pyramid .p1{width:46%;background:#0F3B3A}
+.pyramid .p2{width:64%;background:#2E615A}
+.pyramid .p3{width:82%;background:#6E968E}
+.pyramid .p4{width:100%;background:#C9D9D4;color:#1E4741}
+.findings{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px}
+.find{flex:1 1 280px;background:var(--paper);border-radius:14px;padding:20px}
+.find .who{font-size:13px;font-weight:700}
+.find h3{font-family:"Noto Sans JP",sans-serif;font-size:17px;font-weight:700;margin:6px 0 8px}
+.find p{font-size:14px;color:var(--muted)}
+.find.a .who{color:var(--akamoku)} .find.m .who{color:var(--mekabu)} .find.z .who{color:var(--mozuku)}
+
+/* cooking */
+.cook{display:flex;flex-wrap:wrap;gap:16px}
+.cook .col{flex:1 1 290px;background:var(--paper);border-radius:14px;padding:22px}
+.cook h3{font-size:24px;font-weight:900}
+.cook .col.a h3{color:var(--akamoku)} .cook .col.m h3{color:var(--mekabu)} .cook .col.z h3{color:var(--mozuku)}
+.steps{list-style:none;padding:0;margin:14px 0 0;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:6px 0 6px 38px;font-size:15px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:7px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
+.col.a .steps li::before{background:var(--akamoku)} .col.m .steps li::before{background:var(--mekabu)} .col.z .steps li::before{background:var(--mozuku)}
+.pair{margin-top:14px;font-size:14px}
+.pair b{display:block;font-size:13px;color:var(--muted)}
+
+/* chooser */
+.chooser{display:flex;flex-direction:column;gap:10px}
+.choice{display:flex;flex-wrap:wrap;align-items:center;gap:12px;background:var(--paper);border-radius:12px;padding:14px 18px}
+.choice .q{flex:1 1 300px;font-weight:700}
+.choice .arrow{color:var(--muted)}
+.choice .ans{flex:0 0 auto;display:flex;gap:8px;flex-wrap:wrap}
+.badge{display:inline-block;padding:5px 14px;border-radius:999px;font-weight:700;font-size:14px}
+.badge.a{background:var(--akamoku-bg);color:var(--akamoku)}
+.badge.m{background:var(--mekabu-bg);color:var(--mekabu)}
+.badge.z{background:var(--mozuku-bg);color:var(--mozuku)}
+.badge.x{background:#EEEBE2;color:var(--muted)}
+.choice .why{flex:1 1 100%;font-size:13px;color:var(--muted)}
+
+/* summary */
+.summary{background:var(--sea);color:#F2F7F5;border-radius:18px;padding:36px 28px}
+.summary h2{color:#fff}
+.sumgrid{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px}
+.sumgrid div{flex:1 1 260px;background:rgba(255,255,255,.08);border-radius:12px;padding:18px}
+.sumgrid b{font-family:"Noto Serif JP",serif;font-size:22px;display:block;margin-bottom:6px}
+.sumgrid .a b{color:#F2C58A} .sumgrid .m b{color:#A7DDB0} .sumgrid .z b{color:#9FD3E6}
+.summary p.f{margin-top:20px;color:#CFE3DC;font-size:15px}
+
+/* refs */
+.refs{font-size:13px;color:var(--muted);line-height:1.8;padding-left:1.2em;margin:0}
+.refs li{margin-bottom:4px}
+footer{padding:40px 0 56px;font-size:13px;color:var(--muted)}
+
+@media (max-width:560px){
+  .sec{padding:52px 0}
+  .row .lbl{flex-basis:60px}
+  .row .val{flex-basis:64px}
+  .scale{margin-left:72px}
+  .prow .lbl{flex-basis:60px}
+  .range{font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">SEAWEED GUIDE</span>
+    <h1>あかもく・めかぶ・もずく<br>どう違う？</h1>
+    <p class="sub">どれもネバネバの褐藻（かっそう）類。でも正体も、栄養も、得意分野もけっこう違います。公的データと研究結果をもとに、図でまとめました。</p>
+    <div class="trio">
+      <div class="card a">
+        <div class="name">あかもく</div>
+        <div class="sci">Sargassum horneri</div>
+        <p class="what">独立した1種類の海藻</p>
+        <p class="note">秋田では「ギバサ」、新潟では「ナガモ」とも。加熱すると褐色→鮮やかな緑に。</p>
+        <span class="chip">粘りが最強クラス</span>
+      </div>
+      <div class="card m">
+        <div class="name">めかぶ</div>
+        <div class="sci">Undaria pinnatifida の胞子葉</div>
+        <p class="what">ワカメの「根元の部分」</p>
+        <p class="note">別の海藻ではなく、ワカメの根元付近にできるひだ状の生殖器官。</p>
+        <span class="chip">ミネラルが多め</span>
+      </div>
+      <div class="card z">
+        <div class="name">もずく</div>
+        <div class="sci">Cladosiphon okamuranus ほか</div>
+        <p class="what">実は複数種の総称</p>
+        <p class="note">店頭の主流は太い「沖縄もずく」。細い「糸もずく」は別種。</p>
+        <span class="chip">低カロリー・お手頃</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="sec" id="identity">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">01 ／ 正体</span>
+      <h2>めかぶだけ「種類」じゃない</h2>
+      <p class="lead">3つとも褐藻類ですが、分類上は別々の「目（もく）」に属しています。そして、めかぶはワカメという海藻の一部分です。</p>
+    </div>
+    <div class="tree" role="group" aria-label="3つの海藻の分類図">
+      <div class="root"><span class="pill">褐藻類（Phaeophyceae）</span></div>
+      <div class="branches">
+        <div class="branch">
+          <div class="order">ヒバマタ目</div>
+          <div class="stem" aria-hidden="true"></div>
+          <div class="sp a"><b>あかもく</b><i>Sargassum horneri</i></div>
+        </div>
+        <div class="branch">
+          <div class="order">コンブ目</div>
+          <div class="stem" aria-hidden="true"></div>
+          <div class="sp wakame"><b>ワカメ</b><i>Undaria pinnatifida</i></div>
+          <div class="stem" aria-hidden="true"></div>
+          <div class="sp m"><b>めかぶ</b><i>＝ワカメの胞子葉（根元部分）</i></div>
+        </div>
+        <div class="branch">
+          <div class="order">シオミドロ目</div>
+          <div class="stem" aria-hidden="true"></div>
+          <div class="sp z"><b>沖縄もずく</b><i>Cladosiphon okamuranus ／ 太め・流通の主流</i></div>
+          <div class="sp z"><b>糸もずく</b><i>Nemacystus decipiens ／ 細い糸状</i></div>
+        </div>
+      </div>
+      <p class="callout"><strong>ポイント：</strong>「めかぶ」と「ワカメ」は同じ海藻。ワカメの葉の部分を食べるか、根元の胞子葉を食べるかの違いです。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="nutrition">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">02 ／ 栄養</span>
+      <h2>100gで比べると、めかぶが多め</h2>
+      <p class="lead">文部科学省「日本食品標準成分表（八訂）増補2023年」の値で比較。めかぶは生、沖縄もずくは塩蔵・塩抜きの値です。</p>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--mekabu)"></i>めかぶ（生）</span>
+      <span><i style="background:var(--mozuku)"></i>沖縄もずく（塩抜き）</span>
+      <span><i style="background:repeating-linear-gradient(45deg,#EEEBE2 0 4px,#D9D5C9 4px 8px)"></i>あかもく（公的な標準値なし）</span>
+    </div>
+    <div class="bars">
+      <div class="metric">
+        <h3>エネルギー<span>kcal / 100g</span></h3>
+        <div class="row"><span class="lbl tag-m">めかぶ</span><div class="track"><div class="fill m" style="width:100%"></div></div><span class="val">14</span></div>
+        <div class="row"><span class="lbl tag-z">もずく</span><div class="track"><div class="fill z" style="width:50%"></div></div><span class="val">7</span></div>
+        <div class="row na"><span class="lbl tag-a">あかもく</span><div class="track"></div><span class="val">標準値なし</span></div>
+      </div>
+      <div class="metric">
+        <h3>食物繊維<span>g / 100g</span></h3>
+        <div class="row"><span class="lbl tag-m">めかぶ</span><div class="track"><div class="fill m" style="width:100%"></div></div><span class="val">3.4</span></div>
+        <div class="row"><span class="lbl tag-z">もずく</span><div class="track"><div class="fill z" style="width:59%"></div></div><span class="val">2.0</span></div>
+        <div class="row na"><span class="lbl tag-a">あかもく</span><div class="track"></div><span class="val">標準値なし</span></div>
+      </div>
+      <div class="metric">
+        <h3>カルシウム<span>mg / 100g</span></h3>
+        <div class="row"><span class="lbl tag-m">めかぶ</span><div class="track"><div class="fill m" style="width:100%"></div></div><span class="val">77</span></div>
+        <div class="row"><span class="lbl tag-z">もずく</span><div class="track"><div class="fill z" style="width:29%"></div></div><span class="val">22</span></div>
+        <div class="row na"><span class="lbl tag-a">あかもく</span><div class="track"></div><span class="val">標準値なし</span></div>
+      </div>
+      <div class="metric">
+        <h3>マグネシウム<span>mg / 100g</span></h3>
+        <div class="row"><span class="lbl tag-m">めかぶ</span><div class="track"><div class="fill m" style="width:100%"></div></div><span class="val">61</span></div>
+        <div class="row"><span class="lbl tag-z">もずく</span><div class="track"><div class="fill z" style="width:34%"></div></div><span class="val">21</span></div>
+        <div class="row na"><span class="lbl tag-a">あかもく</span><div class="track"></div><span class="val">標準値なし</span></div>
+      </div>
+      <div class="metric">
+        <h3>ヨウ素<span>μg / 100g</span></h3>
+        <div class="row"><span class="lbl tag-m">めかぶ</span><div class="track"><div class="fill m" style="width:100%"></div></div><span class="val">390</span></div>
+        <div class="row"><span class="lbl tag-z">もずく</span><div class="track"><div class="fill z" style="width:36%"></div></div><span class="val">140</span></div>
+        <div class="row na"><span class="lbl tag-a">あかもく</span><div class="track"></div><span class="val">標準値なし</span></div>
+      </div>
+      <div class="metric">
+        <h3>葉酸<span>μg / 100g</span></h3>
+        <div class="row"><span class="lbl tag-m">めかぶ</span><div class="track"><div class="fill m" style="width:100%"></div></div><span class="val">36</span></div>
+        <div class="row"><span class="lbl tag-z">もずく</span><div class="track"><div class="fill z" style="width:6%"></div></div><span class="val">2</span></div>
+        <div class="row na"><span class="lbl tag-a">あかもく</span><div class="track"></div><span class="val">標準値なし</span></div>
+      </div>
+    </div>
+    <p class="note">※あかもくは食品成分表に収載されておらず、ネット上の「100gあたりの栄養価」はメーカーや個別分析の値です。産地で成分が大きく変わることも報告されています（鎌倉・仙台・佐渡産の比較研究）。データがない＝栄養が少ない、ではありません。<br>※めかぶは生、もずくは塩抜き後の値なので、加工状態の違いも数値に影響します。</p>
+    <p class="warnbox"><strong>ヨウ素は「多いほど良い」わけではありません。</strong>めかぶ50gでヨウ素は約195μg。昆布など他の海藻もよく食べる人、甲状腺の病気がある人は摂りすぎに注意。厚生労働省「日本人の食事摂取基準（2025年版）」でも過剰摂取への配慮が示されています。</p>
+  </div>
+</section>
+
+<section class="sec" id="components">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">03 ／ 特有成分</span>
+      <h2>ネバネバの正体と、注目成分</h2>
+      <p class="lead">3つとも褐藻ならではの成分を含みます。ただしフコイダンは単一の物質ではなく、種類や加工で中身が変わるため「○g多いから効く」とは言えません。</p>
+    </div>
+    <div class="comp">
+      <table>
+        <thead>
+          <tr><th scope="col">成分</th><th scope="col" class="tag-a"><span class="dot" style="background:var(--akamoku)"></span>あかもく</th><th scope="col" class="tag-m"><span class="dot" style="background:var(--mekabu)"></span>めかぶ</th><th scope="col" class="tag-z"><span class="dot" style="background:var(--mozuku)"></span>もずく</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">フコイダン<br><small>ネバネバ成分の一つ</small></th><td>含む。乾燥粉末の1試料で<span class="hl">乾物100gあたり約7.3g</span></td><td>含む（公的な標準値なし）</td><td>研究例が特に多い。<span class="hl">抽出物でのヒト試験あり</span></td></tr>
+          <tr><th scope="row">アルギン酸<br><small>食物繊維の一種</small></th><td>含む。同試料で<span class="hl">乾物100gあたり約52.3g</span></td><td>含む</td><td>含む</td></tr>
+          <tr><th scope="row">フコキサンチン<br><small>褐藻の色素</small></th><td><span class="hl">研究が活発</span>。あかもく由来成分のヒト試験あり</td><td>含む</td><td>含む</td></tr>
+          <tr><th scope="row">ポリフェノール</th><td>産地別で<span class="hl">76〜102mg/100g</span>の報告</td><td>含む（定量値なし）</td><td>含む（定量値なし）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">※乾燥品の値と生・ボイル品の値は水分量が違うため、そのまま並べて「何倍」とは比べられません。</p>
+  </div>
+</section>
+
+<section class="sec" id="price">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">04 ／ 価格と季節</span>
+      <h2>お手頃なのは、もずく</h2>
+      <p class="lead">2026年10月時点の通販・専門店の掲載価格を100gあたりに換算した目安です（生・冷凍などの湿った状態の商品）。送料・容量で幅があります。</p>
+    </div>
+    <div class="price" role="img" aria-label="100gあたり価格の目安。もずく約100〜260円、めかぶ約250〜400円、あかもく約220〜550円">
+      <div class="scale" aria-hidden="true"><span>0円</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>600</span></div>
+      <div class="prow"><span class="lbl tag-z">もずく</span><div class="track"><div class="range z">100〜260円</div></div></div>
+      <div class="prow"><span class="lbl tag-m">めかぶ</span><div class="track"><div class="range m">250〜400円</div></div></div>
+      <div class="prow"><span class="lbl tag-a">あかもく</span><div class="track"><div class="range a">220〜550円</div></div></div>
+    </div>
+    <div class="season">
+      <div><b class="tag-z">もずく</b>沖縄の主要な養殖水産物で流通量が多く、生・塩蔵・冷凍・三杯酢カップと形態も豊富。三杯酢カップは調味液込みなので、塩分・糖分は表示で確認を。</div>
+      <div><b class="tag-m">めかぶ</b>ワカメの収穫期（東北などで春が中心）が旬。新物は季節限定で、ふだんは湯通し・塩蔵・冷凍品が通年で出回ります。</div>
+      <div><b class="tag-a">あかもく</b>地域の水産物として、ボイル済み・刻み済みの小分け冷凍が中心。小容量の通販は100gあたりが割高になりがち。</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="health">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">05 ／ 健康効果</span>
+      <h2>「効く」の根拠はどこまである？</h2>
+      <p class="lead">広告でよく見る「免疫力アップ」「がん予防」と、実際の研究の強さは別物。人で確かめた研究なのか、細胞や動物の実験なのかで見分けましょう。</p>
+    </div>
+    <div class="pyramid" role="img" aria-label="エビデンスの強さ。強い順にランダム化比較試験・ヒト介入研究、観察研究、動物実験、細胞実験">
+      <div class="p1">RCT・ヒト介入研究</div>
+      <div class="p2">観察研究（コホート）</div>
+      <div class="p3">動物実験</div>
+      <div class="p4">細胞・試験管の実験</div>
+    </div>
+    <div class="evleg">
+      <span class="lv lv3">ヒト試験あり（食品そのもの）</span>
+      <span class="lv lv2">ヒト試験あり（抽出成分）</span>
+      <span class="lv lv1">主に動物・細胞</span>
+      <span class="lv lv0">根拠不足</span>
+    </div>
+    <div class="ev">
+      <table>
+        <thead><tr><th scope="col" style="text-align:left">健康項目</th><th scope="col" class="tag-a">あかもく</th><th scope="col" class="tag-m">めかぶ</th><th scope="col" class="tag-z">もずく</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">食後の血糖</th><td><span class="lv lv3">上昇速度を緩やかに</span></td><td><span class="lv lv3">食後早期の血糖低下</span></td><td><span class="lv lv2">全体では限定的</span></td></tr>
+          <tr><th scope="row">HbA1c・糖代謝</th><td><span class="lv lv2">一部の群で低下</span></td><td><span class="lv lv0">根拠不足</span></td><td><span class="lv lv2">明確な改善なし</span></td></tr>
+          <tr><th scope="row">血圧</th><td><span class="lv lv0">根拠不足</span></td><td><span class="lv lv3">試験あり・効果は限定的</span></td><td><span class="lv lv2">明確な改善なし</span></td></tr>
+          <tr><th scope="row">腸・お通じ</th><td><span class="lv lv0">根拠不足</span></td><td><span class="lv lv0">根拠不足</span></td><td><span class="lv lv2">排便回数が増加</span></td></tr>
+          <tr><th scope="row">抗酸化・抗炎症</th><td><span class="lv lv1">主に前臨床</span></td><td><span class="lv lv1">主に前臨床</span></td><td><span class="lv lv1">主に前臨床</span></td></tr>
+          <tr><th scope="row">免疫</th><td><span class="lv lv0">根拠不足</span></td><td><span class="lv lv0">根拠不足</span></td><td><span class="lv lv0">根拠不足</span></td></tr>
+          <tr><th scope="row">がん予防</th><td><span class="lv lv0">ヒトで未確立</span></td><td><span class="lv lv0">ヒトで未確立</span></td><td><span class="lv lv0">ヒトで未確立</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="findings">
+      <div class="find m"><span class="who">めかぶ ｜ 2014年・ヒト研究</span><h3>白米と一緒に70g</h3><p>白米中心の食事にめかぶ70gを添えると、食後30分の血糖値と初期の上昇量が低く抑えられた。ただし1回の食事での短期的な結果。</p></div>
+      <div class="find a"><span class="who">あかもく ｜ 2024年・ヒト研究</span><h3>血糖の「上がり方」がゆるやかに</h3><p>ご飯と一緒に食べると血糖の上昇スピードが抑えられた。一方、ピーク値や総量は有意には下がらなかった。</p></div>
+      <div class="find z"><span class="who">もずく ｜ 2019年・RCT</span><h3>お通じの回数が増えた</h3><p>もずく由来の高分子フコイダン（抽出物）を12週間。血糖・脂質の改善は限定的だったが、排便回数は有意に増加。もずくそのものの結果ではない点に注意。</p></div>
+    </div>
+    <p class="note">海藻全体では、日本人8万人超の追跡調査で海藻をよく食べる人ほど虚血性心疾患のリスクが低い関連が報告されています。ただし観察研究で、どの海藻の効果かは区別できません。</p>
+  </div>
+</section>
+
+<section class="sec" id="cooking">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">06 ／ 食べ方</span>
+      <h2>得意な料理がちがう</h2>
+      <p class="lead">同じネバネバでも、料理での使いどころは別々。市販の下処理済み品なら手間はほぼゼロです。</p>
+    </div>
+    <div class="cook">
+      <div class="col a">
+        <h3>あかもく</h3>
+        <ol class="steps">
+          <li>よく洗う</li>
+          <li>硬い茎・異物を除く</li>
+          <li>さっと湯通し（緑色に）</li>
+          <li>冷やして細かく刻む・叩く</li>
+          <li>小分けして冷凍</li>
+        </ol>
+        <p class="pair"><b>相性のいい料理</b>納豆、卵かけご飯、そば・うどん、豆腐、汁物、お好み焼きへの練り込み</p>
+      </div>
+      <div class="col m">
+        <h3>めかぶ</h3>
+        <ol class="steps">
+          <li>（生なら）湯通しで鮮緑色に</li>
+          <li>細切りにして粘りを出す</li>
+          <li>塩蔵品はしっかり塩抜き</li>
+          <li>市販の刻み・味付きならそのまま</li>
+        </ol>
+        <p class="pair"><b>相性のいい料理</b>ご飯のお供、ポン酢・だし和え、冷奴、サラダ。開けてすぐ食べられる手軽さが強み</p>
+      </div>
+      <div class="col z">
+        <h3>もずく</h3>
+        <ol class="steps">
+          <li>塩蔵品は水で塩抜き</li>
+          <li>生・冷蔵品は「塩抜き不要」も</li>
+          <li>食べやすい長さに切る</li>
+          <li>酢・だし・汁物に合わせる</li>
+        </ol>
+        <p class="pair"><b>相性のいい料理</b>酢の物、三杯酢、もずくスープ、味噌汁、天ぷら（かき揚げ）</p>
+      </div>
+    </div>
+    <p class="note">※生・冷凍品は表示の保存温度と賞味期限を守り、解凍後の再冷凍は避けましょう。</p>
+  </div>
+</section>
+
+<section class="sec" id="choose">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">07 ／ 選び方</span>
+      <h2>目的別、どれを選ぶ？</h2>
+    </div>
+    <div class="chooser">
+      <div class="choice"><span class="q">ミネラル・食物繊維をしっかり摂りたい</span><span class="arrow" aria-hidden="true">→</span><span class="ans"><span class="badge m">めかぶ</span></span><span class="why">公的な成分値で食物繊維・Ca・Mgが3つの中で多い。ヨウ素も多めなので食べすぎに注意。</span></div>
+      <div class="choice"><span class="q">カロリーを抑えて量を食べたい</span><span class="arrow" aria-hidden="true">→</span><span class="ans"><span class="badge z">もずく</span></span><span class="why">沖縄もずくは100gで約7kcal。三杯酢カップは調味液の塩分・糖分を確認。</span></div>
+      <div class="choice"><span class="q">お通じ・腸の調子が気になる</span><span class="arrow" aria-hidden="true">→</span><span class="ans"><span class="badge z">もずく</span><span class="badge m">めかぶ</span></span><span class="why">もずく由来成分で排便回数が増えた試験あり（抽出物）。めかぶも食物繊維が多め。</span></div>
+      <div class="choice"><span class="q">食後の血糖の上がり方が気になる</span><span class="arrow" aria-hidden="true">→</span><span class="ans"><span class="badge m">めかぶ</span><span class="badge a">あかもく</span></span><span class="why">いずれもご飯と一緒に食べたヒト研究あり。ただし糖尿病の予防・治療効果を示したものではありません。</span></div>
+      <div class="choice"><span class="q">粘りと料理アレンジを楽しみたい</span><span class="arrow" aria-hidden="true">→</span><span class="ans"><span class="badge a">あかもく</span></span><span class="why">粘りが強く、ご飯・麺・汁物・生地への練り込みまで使い道が広い。</span></div>
+      <div class="choice"><span class="q">とにかく安く、手軽に続けたい</span><span class="arrow" aria-hidden="true">→</span><span class="ans"><span class="badge z">もずく</span></span><span class="why">大容量品や三杯酢カップは100gあたりの価格が低めの例が多い。</span></div>
+      <div class="choice"><span class="q">がん予防・免疫力アップのため</span><span class="arrow" aria-hidden="true">→</span><span class="ans"><span class="badge x">特定の1種は推せない</span></span><span class="why">どれも人での予防効果は確立していません。細胞・動物の結果と混同しないことが大切です。</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="summary">
+      <span class="kicker" style="color:#A9D3C6">まとめ</span>
+      <h2>「どれが一番」より、入れ替えて使うのが正解</h2>
+      <div class="sumgrid">
+        <div class="m"><b>めかぶ</b>栄養を数字で管理したい人向け。成分表が整っていて、食後血糖のヒトデータもある。</div>
+        <div class="z"><b>もずく</b>低カロリー・低価格・食べやすさの三拍子。もずく由来成分の腸の研究も。</div>
+        <div class="a"><b>あかもく</b>強い粘りと料理の幅。ポリフェノールやフコキサンチンなど成分研究が面白い。</div>
+      </div>
+      <p class="f">どれも健康的な食事の一品としては心強い存在。ただ、特定の病気を防ぐ「機能性食品」としての根拠はまだ限定的です。1種類を大量に食べるより、日々のおかずで入れ替えながら楽しむのがおすすめです。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">参考資料</span>
+      <h2 style="font-size:22px">出典</h2>
+    </div>
+    <ul class="refs">
+      <li>文部科学省「食品成分データベース／日本食品標準成分表（八訂）増補2023年」（めかぶわかめ／生、おきなわもずく／塩蔵／塩抜き、もずく／塩蔵／塩抜き）</li>
+      <li>厚生労働省「日本人の食事摂取基準（2025年版）」</li>
+      <li>谷口（山田）亜樹子ほか「鎌倉・仙台・佐渡産アカモクの成分比較」日本家政学会誌, 2019</li>
+      <li>荒木葉子ほか「山田湾産アカモク粉末の成分と調理利用」日本調理科学会大会, 2022</li>
+      <li>齋藤義之ほか「加工アカモクと米飯摂取時の血糖動態」2024</li>
+      <li>Mikami et al., Journal of Nutritional Science, 2017（アカモク由来フコキサンチン油のRCT）</li>
+      <li>Tanemura et al., Journal of Medical Investigation, 2014（めかぶと食後血糖）</li>
+      <li>厚生労働省 臨床研究情報ポータル（めかぶ4週間摂取と血圧の介入試験, 2022）</li>
+      <li>もずく由来高分子フコイダンの糖尿病患者RCT, 2019</li>
+      <li>JPHC Study, American Journal of Clinical Nutrition, 2019（海藻摂取と心血管疾患）</li>
+      <li>Murai et al., European Journal of Clinical Nutrition, 2021（海藻と健康のレビュー）</li>
+      <li>沖縄県「もずく」関連資料／農林水産省 ワカメの収穫・加工</li>
+      <li>価格：2026年10月時点の通販・海藻専門店・水産加工事業者の掲載価格を100g換算</li>
+    </ul>
+    <p class="note">本ページは一般的な情報提供を目的としたもので、医療上の助言ではありません。持病のある方、ヨウ素制限を指示されている方は医師に相談してください。</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">最終更新：2026年10月</div>
+</footer>
+
+</body>
+</html>
